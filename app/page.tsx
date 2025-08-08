@@ -4,6 +4,7 @@ import Dobra2 from "@/components/sections/dobra-2";
 import Dobra3 from "@/components/sections/dobra-3";
 import Dobra4 from "@/components/sections/dobra-4";
 import Dobra5 from "@/components/sections/dobra-5";
+import Dobra6 from "@/components/sections/dobra-6";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
         <Dobra3 />
         <Dobra4 />
         <Dobra5 />
+        <Dobra6 />
       </div>
     </main>
   );
