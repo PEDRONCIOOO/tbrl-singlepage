@@ -3,38 +3,47 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { FilloutStandardEmbed } from "@fillout/react";
 
 const Dobra5: React.FC = () => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  
+  // Função para abrir o formulário modal
+  const handleOpenForm = () => {
+    // Open Fillout form in a new window/tab
+    window.open('https://forms.fillout.com/t/dBfgxFD3HKus', '_blank', 'width=650,height=700');
+  };
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center py-16 md:py-0 overflow-hidden">
       {/* BG base */}
       <div className="absolute inset-0 bg-black" />
-      {/* Glows */}
+      
+      {/* Glows - reduzidos no mobile para não dominarem o espaço */}
       <motion.div
-        className="pointer-events-none absolute -top-24 -left-28 h-[36vw] w-[36vw] rounded-full bg-green-500/20 blur-[120px]"
+        className="pointer-events-none absolute -top-24 -left-28 h-[40vw] md:h-[36vw] w-[40vw] md:w-[36vw] rounded-full bg-green-500/20 blur-[80px] md:blur-[120px]"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 0.55 }}
         viewport={{ once: true }}
         transition={{ duration: 1.2 }}
       />
       <motion.div
-        className="pointer-events-none absolute -bottom-24 -right-28 h-[28vw] w-[28vw] rounded-full bg-emerald-400/15 blur-[120px]"
+        className="pointer-events-none absolute -bottom-24 -right-28 h-[30vw] md:h-[28vw] w-[30vw] md:w-[28vw] rounded-full bg-emerald-400/15 blur-[80px] md:blur-[120px]"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 0.5 }}
         viewport={{ once: true }}
         transition={{ duration: 1.2, delay: 0.15 }}
       />
+      
       {/* Vignette */}
       <div className="absolute inset-0 pointer-events-none [mask-image:radial-gradient(ellipse_at_center,rgba(0,0,0,0)_42%,black_100%)] bg-black/70" />
 
-      <div className="relative z-10 w-full max-w-7xl px-6 md:px-10 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-        {/* Texto / copy */}
-        <div>
+      <div className="relative z-10 w-full max-w-7xl px-4 sm:px-6 md:px-10 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-center">
+        {/* Texto / copy - melhorias na visualização mobile */}
+        <div className="order-2 lg:order-1">
           <motion.h2
-            className="text-3xl md:text-5xl font-raleway font-extrabold text-white leading-tight mb-6"
+            className="text-2xl sm:text-3xl md:text-5xl font-raleway font-extrabold text-white leading-tight mb-4 md:mb-6"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -45,7 +54,7 @@ const Dobra5: React.FC = () => {
           </motion.h2>
 
           <motion.p
-            className="text-lg md:text-xl text-gray-200/95 mb-8 max-w-2xl"
+            className="text-base sm:text-lg md:text-xl text-gray-200/95 mb-6 md:mb-8 max-w-2xl"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -57,8 +66,8 @@ const Dobra5: React.FC = () => {
             sem montar a infraestrutura do zero.
           </motion.p>
 
-          {/* bullets */}
-          <div className="space-y-4">
+          {/* bullets - ajustados para melhor visibilidade em mobile */}
+          <div className="space-y-3 md:space-y-4">
             {[
               "Conta segregada e compliance completos.",
               "Custódia e liquidez com SLA empresarial.",
@@ -66,74 +75,57 @@ const Dobra5: React.FC = () => {
             ].map((txt, i) => (
               <motion.div
                 key={txt}
-                className="flex items-start gap-3"
+                className="flex items-start gap-2 md:gap-3"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: 0.12 * i }}
               >
-                <span className="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-sm border border-green-400/40 bg-black/40">
-                  <svg width="12" height="12" viewBox="0 0 24 24" className="text-green-400">
+                <span className="mt-0.5 md:mt-1 inline-flex h-4 md:h-5 w-4 md:w-5 items-center justify-center rounded-sm border border-green-400/40 bg-black/40">
+                  <svg width="10" height="10" viewBox="0 0 24 24" className="text-green-400">
                     <path fill="currentColor" d="M20.285 6.709a1 1 0 0 1 .006 1.414l-9 9a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414l3.293 3.293 8.293-8.293a1 1 0 0 1 1.408 0z"/>
                   </svg>
                 </span>
-                <p className="text-gray-200">{txt}</p>
+                <p className="text-sm sm:text-base text-gray-200">{txt}</p>
               </motion.div>
             ))}
           </div>
 
-          {/* CTA */}
+          {/* CTA - botão para abrir o modal Fillout */}
           <motion.div
-            className="mt-8"
+            className="mt-6 md:mt-8"
             initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: 0.35 }}
           >
-            <Link
-              href="/enterprise"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-md border border-green-400/40 text-green-300 hover:text-black bg-transparent hover:bg-green-400 transition-colors font-semibold"
+            <motion.button
+              onClick={handleOpenForm}
+              className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-md border border-green-400/40 text-green-300 hover:text-black bg-transparent hover:bg-green-400 transition-colors font-semibold text-sm sm:text-base"
+              whileHover={mounted ? { scale: 1.03 } : {}}
+              whileTap={mounted ? { scale: 0.98 } : {}}
             >
               Fale com nosso time enterprise
-              <svg width="16" height="16" viewBox="0 0 24 24">
+              <svg width="14" height="14" viewBox="0 0 24 24" className="hidden sm:inline">
                 <path fill="currentColor" d="M13 5l7 7-7 7v-4H4v-6h9V5z" />
               </svg>
-            </Link>
+            </motion.button>
           </motion.div>
         </div>
 
-        {/* Mock visual do “card de token” */}
+        {/* Mock visual do "card de token" - adaptativo para mobile */}
         <motion.div
-          className="relative rounded-3xl border border-green-500/15 bg-black/40 backdrop-blur-xl p-6 md:p-8 min-h-[360px]"
+          className="order-1 lg:order-2 relative rounded-2xl md:rounded-3xl border border-green-500/15 bg-black/40 backdrop-blur-xl p-4 sm:p-6 md:p-8 min-h-[280px] md:min-h-[360px]"
           initial={{ opacity: 0, x: 24 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          {/* logos laterais */}
-          {/* <div className="absolute right-2 top-6 flex flex-col gap-4">
-            {[
-              { bg: "bg-yellow-400/10", ring: "ring-yellow-400/40", letter: "T" },
-              { bg: "bg-red-500/10", ring: "ring-red-500/40", letter: "B" },
-            ].map((l, i) => (
-              <motion.div
-                key={i}
-                className={`grid h-12 w-12 place-items-center rounded-full ${l.bg} ring-1 ${l.ring} text-white/90 font-bold`}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: 0.12 * i }}
-              >
-                {l.letter}
-              </motion.div>
-            ))}
-          </div> */}
-
-          {/* “console” principal */}
-          <div className="mt-2 md:mt-4 grid grid-cols-[auto_1fr] gap-6">
-            {/* Disco/brand */}
+          {/* "console" principal - ajustes para responsividade */}
+          <div className="mt-2 md:mt-4 grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-6">
+            {/* Disco/brand - centralizado no mobile */}
             <motion.div
-              className="relative h-40 w-40 rounded-full bg-gradient-to-tr from-emerald-700 to-emerald-400 shadow-[inset_0_0_40px_rgba(255,255,255,0.15)]"
+              className="relative h-28 w-28 sm:h-32 md:h-40 sm:w-32 md:w-40 rounded-full bg-gradient-to-tr from-emerald-700 to-emerald-400 shadow-[inset_0_0_40px_rgba(255,255,255,0.15)] mx-auto sm:mx-0"
               initial={{ scale: 0.95, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
@@ -147,50 +139,48 @@ const Dobra5: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               />
-              {/* traços neon girando */}
-             
             </motion.div>
 
-            {/* Sliders / elementos UI */}
-            <div className="flex flex-col justify-center gap-5">
+            {/* Sliders / elementos UI - ajustados para fluidez */}
+            <div className="flex flex-col justify-center gap-3 sm:gap-4 md:gap-5">
               {/* campo estilizado */}
               <motion.div
-                className="h-12 rounded-full border border-green-400/30 bg-black/30 backdrop-blur-md px-5 flex items-center justify-between"
+                className="h-10 sm:h-11 md:h-12 rounded-full border border-green-400/30 bg-black/30 backdrop-blur-md px-4 md:px-5 flex items-center justify-between"
                 initial={{ opacity: 0, x: 12 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45 }}
               >
-                <span className="text-gray-300">Nome do seu token</span>
-                <span className="text-green-300/90">ex: BankBRL</span>
+                <span className="text-sm md:text-base text-gray-300">Nome do token</span>
+                <span className="text-sm md:text-base text-green-300/90">ex: BankBRL</span>
               </motion.div>
 
               <motion.div
-                className="h-12 rounded-full border border-green-400/30 bg-black/30 backdrop-blur-md px-5 flex items-center justify-between"
+                className="h-10 sm:h-11 md:h-12 rounded-full border border-green-400/30 bg-black/30 backdrop-blur-md px-4 md:px-5 flex items-center justify-between"
                 initial={{ opacity: 0, x: 12 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: 0.08 }}
               >
-                <span className="text-gray-300">Domínio/Marca</span>
-                <span className="text-green-300/90">seubanco.com</span>
+                <span className="text-sm md:text-base text-gray-300">Domínio/Marca</span>
+                <span className="text-sm md:text-base text-green-300/90">seubanco.com</span>
               </motion.div>
 
               {/* Chip tBRL */}
               <motion.div
-                className="self-start mt-1 inline-flex items-center gap-2 rounded-full border-2 border-yellow-400/70 px-4 py-2 bg-black/40"
+                className="self-start mt-1 inline-flex items-center gap-2 rounded-full border-2 border-yellow-400/70 px-3 md:px-4 py-1.5 md:py-2 bg-black/40"
                 initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: 0.16 }}
               >
                 <span className="h-2 w-2 rounded-full bg-yellow-300 animate-pulse" />
-                <span className="text-yellow-300 font-semibold">tBRL</span>
+                <span className="text-xs md:text-sm text-yellow-300 font-semibold">tBRL</span>
               </motion.div>
 
-              {/* botão de ação */}
+              {/* botão de ação - também abre o mesmo modal de contato */}
               <motion.button
-                className="mt-2 w-fit px-6 py-3 rounded-md text-black font-semibold bg-green-500 border border-green-400/60 shadow-lg shadow-green-500/20 relative overflow-hidden"
+                className="mt-2 w-fit px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-md text-black font-semibold bg-green-500 border border-green-400/60 shadow-lg shadow-green-500/20 relative overflow-hidden text-sm md:text-base"
                 initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -201,6 +191,7 @@ const Dobra5: React.FC = () => {
                     : {}
                 }
                 whileTap={mounted ? { scale: 0.98 } : {}}
+                onClick={handleOpenForm}
               >
                 <span className="relative z-10">Iniciar white-label</span>
                 <motion.span
@@ -213,7 +204,7 @@ const Dobra5: React.FC = () => {
             </div>
           </div>
 
-          {/* linhas decorativas à direita */}
+          {/* linhas decorativas à direita - visíveis apenas em telas maiores */}
           <motion.div
             className="absolute right-6 bottom-6 hidden md:flex flex-col gap-2 opacity-60"
             initial={{ opacity: 0 }}
@@ -226,6 +217,11 @@ const Dobra5: React.FC = () => {
             <span className="h-2 w-20 rounded bg-white/5" />
           </motion.div>
         </motion.div>
+      </div>
+      
+      {/* Componente Fillout para renderizar o formulário (permanece oculto até ser aberto) */}
+      <div style={{ display: "none" }}>
+        <FilloutStandardEmbed filloutId="dBfgxFD3HKus" />
       </div>
     </section>
   );

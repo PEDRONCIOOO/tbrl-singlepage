@@ -119,13 +119,13 @@ const Dobra3: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <Link
-                href="/api/docs"
+                href="https://axia-tokeniza-us-east-2-s3-bucket.s3.us-east-2.amazonaws.com/tBRL+Whitepaper+PT.pdf" target="_blank" rel="noopener noreferrer"
                 className="rounded-md border-2 border-green-500 text-green-400 px-5 py-3 font-semibold bg-black/30 backdrop-blur-md hover:bg-green-500/10 transition-colors"
               >
                 Verificar via API
               </Link>
               <Link
-                href="/proof-of-reserves"
+                href="https://dev.tbrl.com.br/account/login" target="_blank" rel="noopener noreferrer"
                 className="rounded-md border border-green-400/50 bg-green-500 text-black px-5 py-3 font-semibold shadow-lg shadow-green-500/20 hover:shadow-green-400/40 transition-all"
               >
                 Proof-of-Reserves

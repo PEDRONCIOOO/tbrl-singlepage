@@ -157,7 +157,7 @@ const Dobra1 = () => {
               whileTap={isMounted ? { scale: 0.98 } : {}}
             >
               <span className="relative z-10">
-                <Link href="/integration">Começar Integração</Link>
+                <Link href="https://dev.tbrl.com.br/account/login" target="_blank" rel="noopener noreferrer">Começar Integração</Link>
               </span>
               {/* brilho varrendo */}
               <motion.span
@@ -177,7 +177,7 @@ const Dobra1 = () => {
               }
               whileTap={isMounted ? { scale: 0.98 } : {}}
             >
-              <Link href="/whitepaper.pdf" target="_blank">
+              <Link href="https://axia-tokeniza-us-east-2-s3-bucket.s3.us-east-2.amazonaws.com/tBRL+Whitepaper+PT.pdf" target="_blank" rel="noopener noreferrer">
                 Whitepaper (PDF)
               </Link>
             </motion.button>
