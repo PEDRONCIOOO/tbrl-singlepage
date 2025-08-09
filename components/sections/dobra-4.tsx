@@ -3,32 +3,50 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-
-const REST_SNIPPET = `POST /v1/mint
-{
-  "pixKey": "empresa@banco.com.br",
-  "amount": "1_000.00"
-}`;
-
-const WS_SNIPPET = `WS /v1/stream
-{
-  "subscribe": "pix.mint",
-  "pixKey": "empresa@banco.com.br"
-}
-
-// event:
-{
-  "status": "confirmed",
-  "txHash": "0xabc...def"
-}`;
+import { useLanguage } from "@/context/LanguageContext";
 
 const Dobra4: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [tab, setTab] = useState<"REST" | "WS">("REST");
   const [typed, setTyped] = useState("");
   const typingRef = useRef<number | null>(null);
+  const { t } = useLanguage();
 
-  const code = useMemo(() => (tab === "REST" ? REST_SNIPPET : WS_SNIPPET), [tab]);
+  // Trechos de código vêm das traduções
+  const REST_SNIPPET = useMemo(() => t("api.snippet.rest"), [t]);
+  const WS_SNIPPET = useMemo(() => t("api.snippet.ws"), [t]);
+
+  const code = useMemo(() => (tab === "REST" ? REST_SNIPPET : WS_SNIPPET), [tab, REST_SNIPPET, WS_SNIPPET]);
+
+  // Bullets com dados de tradução
+  const bullets = useMemo(
+    () => [
+      {
+        titleKey: "api.bullet.1.title",
+        descriptionKey: "api.bullet.1.description",
+      },
+      {
+        titleKey: "api.bullet.2.title",
+        descriptionKey: "api.bullet.2.description",
+      },
+      {
+        titleKey: "api.bullet.3.title",
+        descriptionKey: "api.bullet.3.description",
+      },
+    ],
+    []
+  );
+
+  // Chips de tecnologia
+  const chips = useMemo(
+    () => [
+      { key: "api.chip.1" },
+      { key: "api.chip.2" },
+      { key: "api.chip.3" },
+      { key: "api.chip.4" },
+    ],
+    []
+  );
 
   // Efeito de digitação sempre que muda a aba
   useEffect(() => {
@@ -56,7 +74,7 @@ const Dobra4: React.FC = () => {
   }, [code]);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden py-16 md:py-0">
+    <section className="relative min-h-screen flex items-center overflow-hidden py-16 md:py-0" id="api">
       {/* BG base */}
       <div className="absolute inset-0 bg-black" />
       {/* Glows - ajustados para mobile */}
@@ -85,8 +103,9 @@ const Dobra4: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
+          data-i18n="api.badge"
         >
-          API FIRST
+          {isMounted && t("api.badge")}
         </motion.p>
 
         {/* Título - ajustado para mobile */}
@@ -97,8 +116,21 @@ const Dobra4: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          Plug & Play via <span className="text-green-400">REST</span> ou{" "}
-          <span className="text-green-400">WebSocket</span>.
+          <span data-i18n="api.title">{isMounted && t("api.title")}</span>{" "}
+          <span 
+            className="text-green-400" 
+            data-i18n="api.title.rest"
+          >
+            {isMounted && t("api.title.rest")}
+          </span>{" "}
+          <span data-i18n="api.title.or">{isMounted && t("api.title.or")}</span>{" "}
+          <span 
+            className="text-green-400"
+            data-i18n="api.title.ws"
+          >
+            {isMounted && t("api.title.ws")}
+          </span>
+          .
         </motion.h2>
 
         <motion.p
@@ -107,8 +139,9 @@ const Dobra4: React.FC = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
+          data-i18n="api.description"
         >
-          Automatize emissão, queima, KYC e relatórios contábeis em poucas linhas de código.
+          {isMounted && t("api.description")}
         </motion.p>
 
         {/* Layout principal - ajustado para fluxo mobile */}
@@ -201,13 +234,9 @@ const Dobra4: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            {[
-              { t: "Latência Pix < 3s", d: "Eventos confirmados quase em tempo real." },
-              { t: "Sandbox gratuito", d: "Teste sem custos e com dados simulados." },
-              { t: "Webhooks para conciliação automática", d: "Receba callbacks confiáveis com assinaturas HMAC." },
-            ].map((b, i) => (
+            {bullets.map((bullet, i) => (
               <motion.div
-                key={b.t}
+                key={bullet.titleKey}
                 className="flex items-start gap-2 sm:gap-4"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -223,8 +252,18 @@ const Dobra4: React.FC = () => {
                   </svg>
                 </span>
                 <div>
-                  <p className="text-base sm:text-lg md:text-xl text-white">{b.t}</p>
-                  <p className="text-xs sm:text-sm text-gray-300/90">{b.d}</p>
+                  <p 
+                    className="text-base sm:text-lg md:text-xl text-white"
+                    data-i18n={bullet.titleKey}
+                  >
+                    {isMounted && t(bullet.titleKey)}
+                  </p>
+                  <p 
+                    className="text-xs sm:text-sm text-gray-300/90"
+                    data-i18n={bullet.descriptionKey}
+                  >
+                    {isMounted && t(bullet.descriptionKey)}
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -238,10 +277,13 @@ const Dobra4: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.25 }}
             >
               <Link
-                href="https://dev.tbrl.com.br/account/login" target="_blank" rel="noopener noreferrer"
+                href="https://dev.tbrl.com.br/account/login" 
+                target="_blank" 
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 sm:gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-md border border-green-400/40 text-green-300 hover:text-black bg-transparent hover:bg-green-400 transition-colors font-semibold text-sm sm:text-base"
+                data-i18n="api.cta"
               >
-                Ver documentação
+                {isMounted && t("api.cta")}
                 <svg width="14" height="14" viewBox="0 0 24 24" className="hidden sm:inline">
                   <path fill="currentColor" d="M13 5l7 7-7 7v-4H4v-6h9V5z" />
                 </svg>
@@ -256,12 +298,13 @@ const Dobra4: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.35 }}
             >
-              {["SDK TypeScript", "SDK Python", "SLA Empresarial", "Status Page"].map((c, i) => (
+              {chips.map((chip, i) => (
                 <span
                   key={i}
                   className="text-[9px] sm:text-xs rounded-full border border-green-500/20 bg-black/30 backdrop-blur px-2 sm:px-3 py-0.5 sm:py-1 text-gray-300"
+                  data-i18n={chip.key}
                 >
-                  {c}
+                  {isMounted && t(chip.key)}
                 </span>
               ))}
             </motion.div>

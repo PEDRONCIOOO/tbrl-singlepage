@@ -1,54 +1,113 @@
 "use client";
 
-import React, { useState, useId } from "react";
+import React, { useState, useId, useEffect } from "react";
 import { motion } from "framer-motion";
-import Head from "next/head";
+import { useLanguage } from "@/context/LanguageContext";
 
-type FaqItem = { q: string; a: React.ReactNode };
-
-const faqs: FaqItem[] = [
-  { 
-    q: "O tBRL é regulado pelo Bacen?", 
-    a: "O token opera sob o modelo de dinheiro eletrônico lastreado; seguimos a Resolução CVM 88 e as diretrizes do Bacen e seremos pioneiros no cumprimento de quaisquer novas normas."
-  },
-  { 
-    q: "Qual é o SLA de resgate?", 
-    a: "Pix 24×7 com latência média de 3 segundos." 
-  },
-  { 
-    q: "Existe um limite de cunhagem?", 
-    a: "Não — desde que haja 100% de BRL mantidos na conta de reserva."
-  },
-  { 
-    q: "Posso integrar sem KYC?", 
-    a: "Para volumes < R$ 5 k/dia usamos KYC simplificado; acima disso aplicamos KYC/KYB completo."
-  },
-  { 
-    q: "Onde está o contrato?", 
-    a: <>Moonbeam Explorer: <a href="https://moonscan.io/token/0x513E5739AE60B29ac2B33Bfcf0E07F0D079DbDBB" target="_blank" rel="noopener noreferrer" className="text-green-400 underline hover:text-green-300 transition-colors">0x513E5739AE60B29ac2B33Bfcf0E07F0D079DbDBB</a></>
-  },
-  { 
-    q: "Onde posso ver a prova de reservas?", 
-    a: <>No site da Fact Finance, nosso parceiro de auditoria de saldos: <a href="https://fact.finance/reserves/tokeniza" target="_blank" rel="noopener noreferrer" className="text-green-400 underline hover:text-green-300 transition-colors">fact.finance/reserves/tokeniza</a></>
-  },
-  { 
-    q: "Como funciona o KYC?", 
-    a: "Verificação automatizada de identidade, selfie e liveness — também acessível via API."
-  },
-  { 
-    q: "Como acesso os serviços?", 
-    a: <>Integração de API simples. Veja a documentação em <a href="https://dev.tbrl.com.br/" target="_blank" rel="noopener noreferrer" className="text-green-400 underline hover:text-green-300 transition-colors">dev.tbrl.com.br</a></>
-  },
-];
+// Interface para os FAQs que suporta conteúdo traduzido
+interface FaqItem {
+  qKey: string;
+  aKey: string;
+  aLinkKey?: string;
+}
 
 const Dobra7: React.FC = () => {
   const [open, setOpen] = useState<number | null>(0); // abre o 1º por padrão
+  const [mounted, setMounted] = useState(false);
   const uid = useId();
+  const { t } = useLanguage();
+  
+  useEffect(() => setMounted(true), []);
+
+  // Estrutura que mapeia as chaves de tradução para as perguntas do FAQ
+  const faqs: FaqItem[] = [
+    { 
+      qKey: "faq.1.q", 
+      aKey: "faq.1.a" 
+    },
+    { 
+      qKey: "faq.2.q", 
+      aKey: "faq.2.a" 
+    },
+    { 
+      qKey: "faq.3.q", 
+      aKey: "faq.3.a" 
+    },
+    { 
+      qKey: "faq.4.q", 
+      aKey: "faq.4.a" 
+    },
+    { 
+      qKey: "faq.5.q", 
+      aKey: "faq.5.a",
+      aLinkKey: "faq.5.a.link" 
+    },
+    { 
+      qKey: "faq.6.q", 
+      aKey: "faq.6.a",
+      aLinkKey: "faq.6.a.link" 
+    },
+    { 
+      qKey: "faq.7.q", 
+      aKey: "faq.7.a" 
+    },
+    { 
+      qKey: "faq.8.q", 
+      aKey: "faq.8.a",
+      aLinkKey: "faq.8.a.link" 
+    },
+  ];
 
   const toggle = (i: number) => setOpen((p) => (p === i ? null : i));
 
+  // Função que renderiza a resposta de um FAQ, possivelmente com um link
+  const renderAnswer = (item: FaqItem) => {
+    if (!item.aLinkKey) {
+      return mounted && t(item.aKey);
+    }
+    
+    // Para respostas que contêm links
+    const answerText = mounted ? t(item.aKey) : "";
+    const linkUrl = mounted ? t(item.aLinkKey) : "";
+    
+    // Verifica se o texto contém o URL (isso nos diz como formatar a resposta)
+    if (answerText.includes(linkUrl)) {
+      // Substitui a URL no texto pela tag de link
+      const parts = answerText.split(linkUrl);
+      return (
+        <>
+          {parts[0]}
+          <a 
+            href={linkUrl}
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-green-400 underline hover:text-green-300 transition-colors"
+          >
+            {linkUrl}
+          </a>
+          {parts[1] || ''}
+        </>
+      );
+    } else {
+      // Caso o texto e a URL sejam separados
+      return (
+        <>
+          {answerText}{' '}
+          <a 
+            href={linkUrl}
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-green-400 underline hover:text-green-300 transition-colors"
+          >
+            {linkUrl}
+          </a>
+        </>
+      );
+    }
+  };
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden" id="faq">
       {/* BG base */}
       <div className="absolute inset-0 bg-black" />
 
@@ -77,7 +136,15 @@ const Dobra7: React.FC = () => {
           <h2 
             className="text-center text-4xl md:text-6xl font-raleway font-extrabold text-white tracking-tight"
           >
-            Perguntas <span className="text-green-400">Frequentes</span>
+            <span data-i18n="faq.title.questions">
+              {mounted && t("faq.title.questions")}
+            </span>{" "}
+            <span 
+              className="text-green-400"
+              data-i18n="faq.title.highlight"
+            >
+              {mounted && t("faq.title.highlight")}
+            </span>
           </h2>
           <motion.div
             className="pointer-events-none absolute inset-x-0 -top-6 flex justify-center opacity-20"
@@ -91,8 +158,11 @@ const Dobra7: React.FC = () => {
 
         {/* Subheader com palavras-chave relevantes */}
         <div className="mx-auto mt-4 mb-2 text-center">
-          <p className="text-lg text-gray-300">
-            Tire suas dúvidas sobre a stablecoin brasileira 100% lastreada que conecta Pix à Web3
+          <p 
+            className="text-lg text-gray-300"
+            data-i18n="faq.subtitle"
+          >
+            {mounted && t("faq.subtitle")}
           </p>
         </div>
         
@@ -102,8 +172,9 @@ const Dobra7: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45, delay: 0.1 }}
+          data-i18n="faq.badge"
         >
-          Transparência • Dev‑first • On‑chain
+          {mounted && t("faq.badge")}
         </motion.div>
 
         {/* Lista de FAQs com estrutura schema.org */}
@@ -154,8 +225,12 @@ const Dobra7: React.FC = () => {
                     </svg>
                   </motion.span>
 
-                  <h3 itemProp="name" className="flex-1 text-[1.05rem] md:text-lg font-semibold text-white">
-                    {item.q}
+                  <h3 
+                    itemProp="name" 
+                    className="flex-1 text-[1.05rem] md:text-lg font-semibold text-white"
+                    data-i18n={item.qKey}
+                  >
+                    {mounted && t(item.qKey)}
                   </h3>
 
                   {/* Micro indicador de foco/hover */}
@@ -180,8 +255,12 @@ const Dobra7: React.FC = () => {
                   className="px-5 md:px-6"
                 >
                   <div className="pb-5 md:pb-6">
-                    <div itemProp="text" className="rounded-lg border border-green-500/10 bg-black/30 p-4 text-sm text-gray-200/90">
-                      {item.a}
+                    <div 
+                      itemProp="text" 
+                      className="rounded-lg border border-green-500/10 bg-black/30 p-4 text-sm text-gray-200/90"
+                      data-i18n={item.aKey}
+                    >
+                      {renderAnswer(item)}
                     </div>
                   </div>
                 </motion.div>
@@ -206,20 +285,26 @@ const Dobra7: React.FC = () => {
           transition={{ duration: 0.45, delay: 0.1 }}
         >
           <a
-            href="https://dev.tbrl.com.br/account/login" target="_blank" rel="noopener noreferrer"
+            href="https://dev.tbrl.com.br/account/login" 
+            target="_blank" 
+            rel="noopener noreferrer"
             className="rounded-md border border-green-500/40 bg-green-500 text-black px-5 py-3 font-semibold shadow-lg shadow-green-500/20 hover:shadow-green-400/40 transition-all"
+            data-i18n="faq.cta"
           >
-            Ver documentação técnica
+            {mounted && t("faq.cta")}
           </a>
         </motion.div>
         
         {/* Informações adicionais relevantes para SEO */}
         <div className="mt-16 text-center text-sm text-gray-400">
-          <p className="mb-2">
-            tBRL - A stablecoin brasileira que conecta o Pix ao ecossistema blockchain
+          <p 
+            className="mb-2"
+            data-i18n="faq.footer.line1"
+          >
+            {mounted && t("faq.footer.line1")}
           </p>
-          <p>
-            Moonbeam, Polygon, Ethereum, Tron | Operando sob a Resolução CVM 88
+          <p data-i18n="faq.footer.line2">
+            {mounted && t("faq.footer.line2")}
           </p>
         </div>
       </div>

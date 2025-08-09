@@ -4,9 +4,12 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FilloutStandardEmbed } from "@fillout/react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Dobra5: React.FC = () => {
   const [mounted, setMounted] = useState(false);
+  const { t } = useLanguage();
+  
   useEffect(() => setMounted(true), []);
   
   // Função para abrir o formulário modal
@@ -15,8 +18,15 @@ const Dobra5: React.FC = () => {
     window.open('https://forms.fillout.com/t/dBfgxFD3HKus', '_blank', 'width=650,height=700');
   };
 
+  // Lista dos bullets traduzíveis
+  const bullets = [
+    "whitelabel.bullet.1",
+    "whitelabel.bullet.2",
+    "whitelabel.bullet.3",
+  ];
+
   return (
-    <section className="relative min-h-screen flex items-center py-16 md:py-0 overflow-hidden">
+    <section className="relative min-h-screen flex items-center py-16 md:py-0 overflow-hidden" id="casos-de-uso">
       {/* BG base */}
       <div className="absolute inset-0 bg-black" />
       
@@ -48,9 +58,16 @@ const Dobra5: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            data-i18n="whitelabel.title.your"
           >
-            Sua marca,{" "}
-            <span className="text-green-400">nosso motor de liquidez</span>.
+            {mounted && t("whitelabel.title.your")}{" "}
+            <span 
+              className="text-green-400"
+              data-i18n="whitelabel.title.highlight"
+            >
+              {mounted && t("whitelabel.title.highlight")}
+            </span>
+            .
           </motion.h2>
 
           <motion.p
@@ -59,22 +76,16 @@ const Dobra5: React.FC = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
+            data-i18n="whitelabel.description"
           >
-            Lance sua própria stablecoin em real — com logo, cor e domínio —
-            sobre a reserva segregada do tBRL. Ideal para bancos digitais,
-            marketplaces e programas de fidelidade que precisam de BRL on-chain
-            sem montar a infraestrutura do zero.
+            {mounted && t("whitelabel.description")}
           </motion.p>
 
           {/* bullets - ajustados para melhor visibilidade em mobile */}
           <div className="space-y-3 md:space-y-4">
-            {[
-              "Conta segregada e compliance completos.",
-              "Custódia e liquidez com SLA empresarial.",
-              "Dashboard, Webhooks e relatórios contábeis.",
-            ].map((txt, i) => (
+            {bullets.map((key, i) => (
               <motion.div
-                key={txt}
+                key={key}
                 className="flex items-start gap-2 md:gap-3"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -86,7 +97,12 @@ const Dobra5: React.FC = () => {
                     <path fill="currentColor" d="M20.285 6.709a1 1 0 0 1 .006 1.414l-9 9a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414l3.293 3.293 8.293-8.293a1 1 0 0 1 1.408 0z"/>
                   </svg>
                 </span>
-                <p className="text-sm sm:text-base text-gray-200">{txt}</p>
+                <p 
+                  className="text-sm sm:text-base text-gray-200"
+                  data-i18n={key}
+                >
+                  {mounted && t(key)}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -104,8 +120,9 @@ const Dobra5: React.FC = () => {
               className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-md border border-green-400/40 text-green-300 hover:text-black bg-transparent hover:bg-green-400 transition-colors font-semibold text-sm sm:text-base"
               whileHover={mounted ? { scale: 1.03 } : {}}
               whileTap={mounted ? { scale: 0.98 } : {}}
+              data-i18n="whitelabel.cta.talk"
             >
-              Fale com nosso time enterprise
+              {mounted && t("whitelabel.cta.talk")}
               <svg width="14" height="14" viewBox="0 0 24 24" className="hidden sm:inline">
                 <path fill="currentColor" d="M13 5l7 7-7 7v-4H4v-6h9V5z" />
               </svg>
@@ -151,8 +168,18 @@ const Dobra5: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.45 }}
               >
-                <span className="text-sm md:text-base text-gray-300">Nome do token</span>
-                <span className="text-sm md:text-base text-green-300/90">ex: BankBRL</span>
+                <span 
+                  className="text-sm md:text-base text-gray-300"
+                  data-i18n="whitelabel.form.tokenName"
+                >
+                  {mounted && t("whitelabel.form.tokenName")}
+                </span>
+                <span 
+                  className="text-sm md:text-base text-green-300/90"
+                  data-i18n="whitelabel.form.tokenName.example"
+                >
+                  {mounted && t("whitelabel.form.tokenName.example")}
+                </span>
               </motion.div>
 
               <motion.div
@@ -162,8 +189,18 @@ const Dobra5: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: 0.08 }}
               >
-                <span className="text-sm md:text-base text-gray-300">Domínio/Marca</span>
-                <span className="text-sm md:text-base text-green-300/90">seubanco.com</span>
+                <span 
+                  className="text-sm md:text-base text-gray-300"
+                  data-i18n="whitelabel.form.domain"
+                >
+                  {mounted && t("whitelabel.form.domain")}
+                </span>
+                <span 
+                  className="text-sm md:text-base text-green-300/90"
+                  data-i18n="whitelabel.form.domain.example"
+                >
+                  {mounted && t("whitelabel.form.domain.example")}
+                </span>
               </motion.div>
 
               {/* Chip tBRL */}
@@ -192,8 +229,9 @@ const Dobra5: React.FC = () => {
                 }
                 whileTap={mounted ? { scale: 0.98 } : {}}
                 onClick={handleOpenForm}
+                data-i18n="whitelabel.form.cta"
               >
-                <span className="relative z-10">Iniciar white-label</span>
+                <span className="relative z-10">{mounted && t("whitelabel.form.cta")}</span>
                 <motion.span
                   className="absolute inset-y-0 left-[-20%] w-[40%] skew-x-[-20deg] bg-white/20"
                   initial={{ x: "-120%" }}

@@ -4,9 +4,12 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FilloutStandardEmbed } from "@fillout/react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Dobra8: React.FC = () => {
   const [mounted, setMounted] = useState(false);
+  const { t } = useLanguage();
+  
   useEffect(() => setMounted(true), []);
   
   // Função para abrir o formulário modal - usando a mesma abordagem que funciona na dobra-5
@@ -76,7 +79,18 @@ const Dobra8: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.05 }}
           >
-            Pronto para desbloquear o Brasil <span className="text-green-400">on-chain</span>?
+            <span data-i18n="cta.title">
+              {mounted && t("cta.title")}
+            </span>{" "}
+            <span 
+              className="text-green-400" 
+              data-i18n="cta.title.highlight"
+            >
+              {mounted && t("cta.title.highlight")}
+            </span>
+            <span data-i18n="cta.title.end">
+              {mounted && t("cta.title.end")}
+            </span>
           </motion.h2>
 
           {/* Subheadline */}
@@ -86,8 +100,9 @@ const Dobra8: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.15 }}
+            data-i18n="cta.subtitle"
           >
-            Teste o sandbox hoje mesmo ou agende uma demonstração personalizada com nosso time técnico.
+            {mounted && t("cta.subtitle")}
           </motion.p>
 
           {/* Chips de confiança */}
@@ -98,14 +113,16 @@ const Dobra8: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: 0.2 }}
           >
-            {["Comece grátis", "Sem cartão de crédito", "API First"].map((t) => (
-              <span
-                key={t}
-                className="text-[12px] rounded-full border border-green-500/25 bg-black/30 backdrop-blur px-3 py-1 text-green-200"
-              >
-                {t}
-              </span>
-            ))}
+            {mounted &&
+              Array.isArray(t("cta.chips")) && 
+              (t("cta.chips") as unknown as string[]).map((chipText: string) => (
+                <span
+                  key={chipText}
+                  className="text-[12px] rounded-full border border-green-500/25 bg-black/30 backdrop-blur px-3 py-1 text-green-200"
+                >
+                  {chipText}
+                </span>
+              ))}
           </motion.div>
 
           {/* Botões */}
@@ -123,6 +140,7 @@ const Dobra8: React.FC = () => {
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-3 rounded-xl border border-emerald-400/40 bg-emerald-500 px-6 py-4 text-base md:text-lg font-semibold text-black shadow-lg shadow-emerald-500/20 hover:shadow-emerald-400/40 transition-all"
+                data-i18n="cta.button.primary"
               >
                 {/* ícone chave */}
                 <span className="grid h-6 w-6 place-items-center rounded-md bg-black/10">
@@ -133,7 +151,7 @@ const Dobra8: React.FC = () => {
                     />
                   </svg>
                 </span>
-                Criar chave de API
+                {mounted && t("cta.button.primary")}
                 {/* shine */}
                 <span className="relative ml-1 overflow-hidden">
                   <motion.span
@@ -154,6 +172,7 @@ const Dobra8: React.FC = () => {
               <button
                 onClick={handleOpenForm}
                 className="inline-flex items-center gap-3 rounded-xl border-2 border-emerald-400/60 bg-transparent px-6 py-4 text-base md:text-lg font-semibold text-emerald-300 hover:bg-emerald-500/10 transition-all"
+                data-i18n="cta.button.secondary"
               >
                 {/* ícone calendário */}
                 <span className="grid h-6 w-6 place-items-center rounded-md border border-emerald-400/40">
@@ -164,7 +183,7 @@ const Dobra8: React.FC = () => {
                     />
                   </svg>
                 </span>
-                Agendar demo
+                {mounted && t("cta.button.secondary")}
               </button>
             </motion.div>
           </motion.div>

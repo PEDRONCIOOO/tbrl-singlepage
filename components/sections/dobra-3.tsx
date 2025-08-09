@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 // ---- Ajuste os valores aqui (ou passe por props depois) ----
 const BANK_BALANCE = 462_664.51; // Saldo no Banco (BRL)
@@ -14,6 +15,7 @@ const Dobra3: React.FC = () => {
   const [bankDisplay, setBankDisplay] = useState(0);
   const [tbrlDisplay, setTbrlDisplay] = useState(0);
   const rafRef = useRef<number | null>(null);
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
@@ -38,8 +40,17 @@ const Dobra3: React.FC = () => {
   const bankPercent = (BANK_BALANCE / maxVal) * 100;
   const tbrlPercent = (TBRL_SUPPLY / maxVal) * 100;
 
+  // Formatar os valores de acordo com o idioma selecionado
+  const formatCurrency = (value: number) => {
+    if (!mounted) return "";
+
+    return language === "pt-br"
+      ? value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })
+      : value.toLocaleString("en-US", { minimumFractionDigits: 2 });
+  };
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden" id="reservas">
       {/* BG sólido */}
       <div className="absolute inset-0 bg-black" />
       {/* Glows */}
@@ -68,9 +79,16 @@ const Dobra3: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: "easeOut" }}
+          data-i18n="reserves.title"
         >
-          Transparência não é promessa, é{" "}
-          <span className="text-green-400">código aberto</span>.
+          {mounted && t("reserves.title")}{" "}
+          <span
+            className="text-green-400"
+            data-i18n="reserves.title.highlight"
+          >
+            {mounted && t("reserves.title.highlight")}
+          </span>
+          .
         </motion.h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -83,10 +101,10 @@ const Dobra3: React.FC = () => {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             {[
-              "Conta segregada e auditada com registro on-chain.",
-              "Oráculo publica saldo BRL → contrato Proof-of-Reserves.",
-              "Qualquer pessoa pode verificar `totalSupply()` × saldo bancário via API.",
-            ].map((text, i) => (
+              "reserves.bullet.1",
+              "reserves.bullet.2",
+              "reserves.bullet.3",
+            ].map((key, i) => (
               <div key={i} className="flex items-start gap-4">
                 {/* ícone */}
                 <span className="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-sm border border-green-400/40 bg-black/40">
@@ -102,9 +120,12 @@ const Dobra3: React.FC = () => {
                     />
                   </svg>
                 </span>
-                <p className="text-lg md:text-xl text-gray-200/95 leading-relaxed">
+                <p
+                  className="text-lg md:text-xl text-gray-200/95 leading-relaxed"
+                  data-i18n={key}
+                >
                   <span className="bg-black/30 rounded px-1.5 py-0.5 border border-green-500/10">
-                    {text}
+                    {mounted && t(key)}
                   </span>
                 </p>
               </div>
@@ -119,16 +140,22 @@ const Dobra3: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <Link
-                href="https://axia-tokeniza-us-east-2-s3-bucket.s3.us-east-2.amazonaws.com/tBRL+Whitepaper+PT.pdf" target="_blank" rel="noopener noreferrer"
+                href="https://axia-tokeniza-us-east-2-s3-bucket.s3.us-east-2.amazonaws.com/tBRL+Whitepaper+PT.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-md border-2 border-green-500 text-green-400 px-5 py-3 font-semibold bg-black/30 backdrop-blur-md hover:bg-green-500/10 transition-colors"
+                data-i18n="reserves.cta.verify"
               >
-                Verificar via API
+                {mounted && t("reserves.cta.verify")}
               </Link>
               <Link
-                href="https://dev.tbrl.com.br/account/login" target="_blank" rel="noopener noreferrer"
+                href="https://fact.finance/reserves/tokeniza"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-md border border-green-400/50 bg-green-500 text-black px-5 py-3 font-semibold shadow-lg shadow-green-500/20 hover:shadow-green-400/40 transition-all"
+                data-i18n="reserves.cta.proof"
               >
-                Proof-of-Reserves
+                {mounted && t("reserves.cta.proof")}
               </Link>
             </motion.div>
           </motion.div>
@@ -142,11 +169,17 @@ const Dobra3: React.FC = () => {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <div className="mb-6 flex items-center justify-between">
-              <h3 className="text-white font-semibold text-lg">
-                Prova de lastro
+              <h3
+                className="text-white font-semibold text-lg"
+                data-i18n="reserves.chart.title"
+              >
+                {mounted && t("reserves.chart.title")}
               </h3>
-              <span className="text-xs text-gray-400">
-                Atualiza em tempo real*
+              <span
+                className="text-xs text-gray-400"
+                data-i18n="reserves.chart.subtitle"
+              >
+                {mounted && t("reserves.chart.subtitle")}
               </span>
             </div>
 
@@ -193,10 +226,7 @@ const Dobra3: React.FC = () => {
                     viewport={{ once: true }}
                     transition={{ delay: 0.15, duration: 0.45 }}
                   >
-                    R${" "}
-                    {BANK_BALANCE.toLocaleString("pt-BR", {
-                      minimumFractionDigits: 2,
-                    })}
+                    R$ {mounted && formatCurrency(BANK_BALANCE)}
                   </motion.span>
                 </motion.div>
 
@@ -226,24 +256,23 @@ const Dobra3: React.FC = () => {
                     viewport={{ once: true }}
                     transition={{ delay: 0.25, duration: 0.45 }}
                   >
-                    R${" "}
-                    {TBRL_SUPPLY.toLocaleString("pt-BR", {
-                      maximumFractionDigits: 0,
-                    })}
+                    R$ {mounted && formatCurrency(TBRL_SUPPLY)}
                   </motion.span>
                 </motion.div>
               </div>
 
               {/* rótulos eixo X (iguais à referência) */}
               <div className="absolute inset-x-0 bottom-2 flex justify-evenly px-6 text-sm text-gray-300/90">
-                <span>Saldo no Banco</span>
-                <span>Total em tBRL</span>
+                <span data-i18n="reserves.chart.bank">{mounted && t("reserves.chart.bank")}</span>
+                <span data-i18n="reserves.chart.supply">{mounted && t("reserves.chart.supply")}</span>
               </div>
             </div>
 
-            <p className="mt-4 text-xs text-gray-400">
-              * Valores ilustrativos. Conecte seu oráculo/endpoint para dados ao
-              vivo.
+            <p
+              className="mt-4 text-xs text-gray-400"
+              data-i18n="reserves.chart.note"
+            >
+              {mounted && t("reserves.chart.note")}
             </p>
           </motion.div>
         </div>

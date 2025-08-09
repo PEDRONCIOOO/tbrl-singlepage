@@ -1,18 +1,96 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-
-const cases = [
-  { title: "Exchanges Globais", desc: "On-ramp Pix sem licença local, liquidez BRL ↔ USDT em minutos." },
-  { title: "Gestores de RWA", desc: "Distribua rendimentos de precatórios, imóveis ou agro em tBRL." },
-  { title: "Fintechs de Pagamento", desc: "Boletos, TEDs e Pix dentro de uma camada programável." },
-  { title: "Empresas de Remessa", desc: "Reduza custos cross-border com stablecoin nativa do Brasil." },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 const Dobra6: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const { t } = useLanguage();
+  
+  useEffect(() => setMounted(true), []);
+
+  // Dados dos casos de uso - virão das traduções
+  const cases = [
+    { 
+      titleKey: "usecases.case.1.title", 
+      descKey: "usecases.case.1.desc" 
+    },
+    { 
+      titleKey: "usecases.case.2.title", 
+      descKey: "usecases.case.2.desc" 
+    },
+    { 
+      titleKey: "usecases.case.3.title", 
+      descKey: "usecases.case.3.desc" 
+    },
+    { 
+      titleKey: "usecases.case.4.title", 
+      descKey: "usecases.case.4.desc" 
+    },
+  ];
+
+  // Badges flutuantes
+  const badges = [
+    {
+      position: { left: "70%", top: "18%" },
+      animation: { y: [0, -6, 0] },
+      duration: 3.5,
+      delay: 0.15,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" className="text-white/90">
+          <path fill="currentColor" d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 3h10v14H7V5Zm5 12a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"/>
+        </svg>
+      ),
+      titleKey: "usecases.badge.1.title",
+      subtitleKey: "usecases.badge.1.subtitle"
+    },
+    {
+      position: { left: "72%", top: "50%" },
+      animation: { x: [0, 4, 0] },
+      duration: 3.2,
+      delay: 0.25,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" className="text-white/90">
+          <path fill="currentColor" d="M12 3 3 7v2h18V7L12 3Zm-8 7v8h2v-8H4Zm4 0v8h2v-8H8Zm4 0v8h2v-8h-2Zm4 0v8h2v-8h-2Zm-11 10h14v2H5v-2Z"/>
+        </svg>
+      ),
+      titleKey: "usecases.badge.2.title",
+      subtitleKey: "usecases.badge.2.subtitle"
+    },
+    {
+      position: { left: "58%", top: "76%" },
+      animation: { y: [0, -5, 0] },
+      duration: 3.8,
+      delay: 0.35,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" className="text-green-400">
+          <path fill="currentColor" d="M10 6h8l-3-3 1.4-1.4L22.8 6l-6.4 4.4L15 9l3-3h-8V6Zm4 12H6l3 3-1.4 1.4L1.2 18l6.4-4.4L9 15l-3 3h8v0Z"/>
+        </svg>
+      ),
+      titleKey: "usecases.badge.3.title",
+      subtitleKey: "usecases.badge.3.subtitle"
+    },
+    {
+      position: { left: "16%", top: "76%" },
+      animation: { x: [0, -4, 0] },
+      duration: 3.4,
+      delay: 0.45,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-emerald-300">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+          <path d="M3 12h18" stroke="currentColor" strokeWidth="2" />
+          <path d="M12 3c3 3.6 3 13.4 0 18" stroke="currentColor" strokeWidth="2" />
+          <path d="M12 3c-3 3.6-3 13.4 0 18" stroke="currentColor" strokeWidth="2" />
+        </svg>
+      ),
+      titleKey: "usecases.badge.4.title",
+      subtitleKey: "usecases.badge.4.subtitle"
+    }
+  ];
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden" id="casos-de-uso">
       {/* BG base */}
       <div className="absolute inset-0 bg-black" />
       {/* Glows */}
@@ -41,7 +119,15 @@ const Dobra6: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <span className="text-green-400">Casos</span> de Uso
+          <span 
+            className="text-green-400"
+            data-i18n="usecases.title"
+          >
+            {mounted && t("usecases.title")}
+          </span>{" "}
+          <span data-i18n="usecases.title.highlight">
+            {mounted && t("usecases.title.highlight")}
+          </span>
         </motion.h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 items-center">
@@ -60,8 +146,9 @@ const Dobra6: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
+              data-i18n="usecases.core"
             >
-              ● tBRL Core
+              ● {mounted && t("usecases.core")}
             </motion.span>
 
             {/* moeda central */}
@@ -97,109 +184,41 @@ const Dobra6: React.FC = () => {
             </motion.div>
 
             {/* badges flutuando (sem conexões) */}
-            {/* Celular */}
-            <motion.div
-              className="absolute grid place-items-center rounded-2xl border border-emerald-400/25 bg-black/40 backdrop-blur-md px-4 py-3"
-              style={{ left: "70%", top: "18%" }}
-              initial={{ opacity: 0, y: -8, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-              animate={{ y: [0, -6, 0] }}
-              // loop suave
-              // @ts-ignore
-              transition2={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <div className="flex items-center gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-xl border border-emerald-400/30 bg-white/5">
-                  <svg width="22" height="22" viewBox="0 0 24 24" className="text-white/90">
-                    <path fill="currentColor" d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 3h10v14H7V5Zm5 12a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"/>
-                  </svg>
-                </span>
-                <div className="text-xs">
-                  <p className="text-white/90 font-semibold leading-tight">Apps & Wallets</p>
-                  <p className="text-emerald-300/90">SDK Mobile</p>
+            {badges.map((badge, index) => (
+              <motion.div
+                key={badge.titleKey}
+                className="absolute grid place-items-center rounded-2xl border border-emerald-400/25 bg-black/40 backdrop-blur-md px-4 py-3"
+                style={badge.position}
+                initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: badge.delay }}
+                animate={{
+                  ...badge.animation,
+                  transition: { duration: badge.duration, repeat: Infinity, ease: "easeInOut" }
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 place-items-center rounded-xl border border-emerald-400/30 bg-white/5">
+                    {badge.icon}
+                  </span>
+                  <div className="text-xs">
+                    <p 
+                      className="text-white/90 font-semibold leading-tight"
+                      data-i18n={badge.titleKey}
+                    >
+                      {mounted && t(badge.titleKey)}
+                    </p>
+                    <p 
+                      className="text-emerald-300/90"
+                      data-i18n={badge.subtitleKey}
+                    >
+                      {mounted && t(badge.subtitleKey)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-
-            {/* Banco */}
-            <motion.div
-              className="absolute grid place-items-center rounded-2xl border border-emerald-400/25 bg-black/40 backdrop-blur-md px-4 py-3"
-              style={{ left: "72%", top: "50%" }}
-              initial={{ opacity: 0, x: 10, scale: 0.95 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.25 }}
-              animate={{ x: [0, 4, 0] }}
-              // @ts-ignore
-              transition2={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <div className="flex items-center gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-xl border border-emerald-400/30 bg-white/5">
-                  <svg width="22" height="22" viewBox="0 0 24 24" className="text-white/90">
-                    <path fill="currentColor" d="M12 3 3 7v2h18V7L12 3Zm-8 7v8h2v-8H4Zm4 0v8h2v-8H8Zm4 0v8h2v-8h-2Zm4 0v8h2v-8h-2Zm-11 10h14v2H5v-2Z"/>
-                  </svg>
-                </span>
-                <div className="text-xs">
-                  <p className="text-white/90 font-semibold leading-tight">Banking</p>
-                  <p className="text-emerald-300/90">Pix & Boleto</p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Remessas */}
-            <motion.div
-              className="absolute grid place-items-center rounded-2xl border border-emerald-400/25 bg-black/40 backdrop-blur-md px-4 py-3"
-              style={{ left: "58%", top: "76%" }}
-              initial={{ opacity: 0, y: 8, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.35 }}
-              animate={{ y: [0, -5, 0] }}
-              // @ts-ignore
-              transition2={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <div className="flex items-center gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-xl border border-emerald-400/30 bg-white/5">
-                  <svg width="22" height="22" viewBox="0 0 24 24" className="text-green-400">
-                    <path fill="currentColor" d="M10 6h8l-3-3 1.4-1.4L22.8 6l-6.4 4.4L15 9l3-3h-8V6Zm4 12H6l3 3-1.4 1.4L1.2 18l6.4-4.4L9 15l-3 3h8v0Z"/>
-                  </svg>
-                </span>
-                <div className="text-xs">
-                  <p className="text-white/90 font-semibold leading-tight">Remessas</p>
-                  <p className="text-emerald-300/90">Spread baixo</p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Mundo */}
-            <motion.div
-              className="absolute grid place-items-center rounded-2xl border border-emerald-400/25 bg-black/40 backdrop-blur-md px-4 py-3"
-              style={{ left: "16%", top: "76%" }}
-              initial={{ opacity: 0, x: -10, scale: 0.95 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.45 }}
-              animate={{ x: [0, -4, 0] }}
-              // @ts-ignore
-              transition2={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <div className="flex items-center gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-xl border border-emerald-400/30 bg-white/5">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-emerald-300">
-                    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
-                    <path d="M3 12h18" stroke="currentColor" strokeWidth="2" />
-                    <path d="M12 3c3 3.6 3 13.4 0 18" stroke="currentColor" strokeWidth="2" />
-                    <path d="M12 3c-3 3.6-3 13.4 0 18" stroke="currentColor" strokeWidth="2" />
-                  </svg>
-                </span>
-                <div className="text-xs">
-                  <p className="text-white/90 font-semibold leading-tight">Global</p>
-                  <p className="text-emerald-300/90">EVM ready</p>
-                </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            ))}
 
             {/* chips rápidos (em baixo da moeda) */}
             <motion.div
@@ -209,14 +228,17 @@ const Dobra6: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.45, delay: 0.25 }}
             >
-              {["KYC/KYB", "Webhooks", "SLA", "SDK TS/Python"].map((t, i) => (
-                <span
-                  key={t}
-                  className="text-[11px] rounded-full border border-green-500/25 bg-black/30 backdrop-blur px-3 py-1 text-gray-200"
-                >
-                  {t}
-                </span>
-              ))}
+              {mounted && 
+                  (t("usecases.chips") as unknown as string[])
+                    .map((chipText: string, i: number) => (
+                      <span
+                        key={i}
+                        className="text-[11px] rounded-full border border-green-500/25 bg-black/30 backdrop-blur px-3 py-1 text-gray-200"
+                      >
+                        {chipText}
+                      </span>
+                    ))
+                }
             </motion.div>
 
             {/* ticker leve no rodapé */}
@@ -231,9 +253,9 @@ const Dobra6: React.FC = () => {
                 className="absolute whitespace-nowrap text-xs text-emerald-200/90 top-1/2 -translate-y-1/2"
                 animate={{ x: ["0%", "-60%"] }}
                 transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+                data-i18n="usecases.ticker"
               >
-                &nbsp;&nbsp;• Liquidez instantânea • Custódia segregada • Auditoria on-chain • Integração REST/WS •
-                Proof-of-Reserves •
+                &nbsp;&nbsp;{mounted && t("usecases.ticker")}
               </motion.div>
             </motion.div>
           </motion.div>
@@ -242,7 +264,7 @@ const Dobra6: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {cases.map((c, i) => (
               <motion.div
-                key={c.title}
+                key={c.titleKey}
                 className="relative rounded-2xl border border-green-500/15 bg-black/40 backdrop-blur-xl px-6 py-6 overflow-hidden group"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -263,8 +285,18 @@ const Dobra6: React.FC = () => {
                   transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
                   style={{ background: "radial-gradient(600px 140px at 30% 0%, rgba(16,185,129,0.2), transparent 60%)" }}
                 />
-                <h3 className="text-white text-xl font-semibold mb-1">{c.title}</h3>
-                <p className="text-gray-300/95 text-sm leading-relaxed">{c.desc}</p>
+                <h3 
+                  className="text-white text-xl font-semibold mb-1"
+                  data-i18n={c.titleKey}
+                >
+                  {mounted && t(c.titleKey)}
+                </h3>
+                <p 
+                  className="text-gray-300/95 text-sm leading-relaxed"
+                  data-i18n={c.descKey}
+                >
+                  {mounted && t(c.descKey)}
+                </p>
                 <motion.span
                   className="absolute right-4 bottom-4 h-6 w-6 rounded-full border border-green-400/30 grid place-items-center text-green-300"
                   initial={{ scale: 0.9, opacity: 0 }}
@@ -272,6 +304,7 @@ const Dobra6: React.FC = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.35, delay: 0.2 }}
                   animate={{ y: [0, -2, 0] }}
+                  // Pequena animação de flutuação
                 >
                   ↗
                 </motion.span>

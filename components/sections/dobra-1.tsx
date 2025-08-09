@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 // Partículas com posições fixas para evitar mismatch de hidratação
 const particlePositions = [
@@ -21,6 +22,7 @@ const particlePositions = [
 
 const Dobra1 = () => {
   const [isMounted, setIsMounted] = useState(false);
+  const { t } = useLanguage();
 
   // Parallax seguro (só roda no cliente)
   const mx = useMotionValue(0);
@@ -98,10 +100,11 @@ const Dobra1 = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
             transition={{ duration: 0.6 }}
+            data-i18n="hero.badge"
           >
             <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
             <span className="text-sm text-gray-200">
-              +20MM transações on-chain no 1º mês
+              {t('hero.badge')}
             </span>
           </motion.div>
 
@@ -112,14 +115,20 @@ const Dobra1 = () => {
             animate={isMounted ? { opacity: 1, x: 0 } : { opacity: 0, x: -24 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
           >
-            <span className="bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent">
-              Entre
+            <span 
+              className="bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent"
+              data-i18n="hero.title.enter"
+            >
+              {t('hero.title.enter')}
             </span>{" "}
-            e{" "}
-            <span className="bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent">
-              saia
+            <span data-i18n="hero.title.middle">{t('hero.title.middle')}</span>{" "}
+            <span 
+              className="bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent"
+              data-i18n="hero.title.exit"
+            >
+              {t('hero.title.exit')}
             </span>{" "}
-            do Brasil em segundos
+            <span data-i18n="hero.title.end">{t('hero.title.end')}</span>
           </motion.h1>
 
           {/* Descrição */}
@@ -128,13 +137,13 @@ const Dobra1 = () => {
             initial={{ opacity: 0 }}
             animate={isMounted ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
+            data-i18n="hero.description"
           >
-            O tBRL é a stablecoin{" "}
-            <span className="text-green-400 font-semibold">
-              100% lastreada em real
+            {t('hero.description').replace(t('hero.description.highlight'), '')}
+            <span className="text-green-400 font-semibold" data-i18n="hero.description.highlight">
+              {t('hero.description.highlight')}
             </span>{" "}
-            que conecta o Pix à Web3, liberando liquidez instantânea para
-            exchanges, fintechs, bancos digitais e corporações globais.
+            {t('hero.description').split(t('hero.description.highlight'))[1]}
           </motion.p>
 
           {/* Botões */}
@@ -155,9 +164,12 @@ const Dobra1 = () => {
                   : {}
               }
               whileTap={isMounted ? { scale: 0.98 } : {}}
+              data-i18n="hero.cta.primary"
             >
               <span className="relative z-10">
-                <Link href="https://dev.tbrl.com.br/account/login" target="_blank" rel="noopener noreferrer">Começar Integração</Link>
+                <Link href="https://dev.tbrl.com.br/account/login" target="_blank" rel="noopener noreferrer">
+                  {t('hero.cta.primary')}
+                </Link>
               </span>
               {/* brilho varrendo */}
               <motion.span
@@ -176,9 +188,10 @@ const Dobra1 = () => {
                   : {}
               }
               whileTap={isMounted ? { scale: 0.98 } : {}}
+              data-i18n="hero.cta.secondary"
             >
               <Link href="https://axia-tokeniza-us-east-2-s3-bucket.s3.us-east-2.amazonaws.com/tBRL+Whitepaper+PT.pdf" target="_blank" rel="noopener noreferrer">
-                Whitepaper (PDF)
+                {t('hero.cta.secondary')}
               </Link>
             </motion.button>
           </motion.div>
@@ -190,14 +203,23 @@ const Dobra1 = () => {
             animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <span className="rounded-full border border-green-400/25 bg-black/30 px-3 py-1 backdrop-blur-md">
-              Liquidez instantânea
+            <span 
+              className="rounded-full border border-green-400/25 bg-black/30 px-3 py-1 backdrop-blur-md"
+              data-i18n="hero.badge.1"
+            >
+              {t('hero.badge.1')}
             </span>
-            <span className="rounded-full border border-green-400/25 bg-black/30 px-3 py-1 backdrop-blur-md">
-              Auditoria & Prova de reservas
+            <span 
+              className="rounded-full border border-green-400/25 bg-black/30 px-3 py-1 backdrop-blur-md"
+              data-i18n="hero.badge.2"
+            >
+              {t('hero.badge.2')}
             </span>
-            <span className="rounded-full border border-green-400/25 bg-black/30 px-3 py-1 backdrop-blur-md">
-              Integração Pix ↔ Web3
+            <span 
+              className="rounded-full border border-green-400/25 bg-black/30 px-3 py-1 backdrop-blur-md"
+              data-i18n="hero.badge.3"
+            >
+              {t('hero.badge.3')}
             </span>
           </motion.div>
         </div>
@@ -243,19 +265,16 @@ const Dobra1 = () => {
         ))}
       </div>
 
-      {/* “Código” decorativo */}
+      {/* "Código" decorativo */}
       <motion.div
         className="absolute bottom-[30%] right-[10%] hidden md:block"
         initial={{ opacity: 0, y: 8 }}
         animate={isMounted ? { opacity: 0.7, y: 0 } : { opacity: 0, y: 8 }}
         transition={{ delay: 1.6, duration: 0.9 }}
+        data-i18n="hero.code"
       >
         <pre className="text-green-500 text-xs font-mono opacity-40">
-{`function transfer() {
-  const pix = connect();
-  const web3 = init();
-  return pix.bridge(web3);
-}`}
+          {t('hero.code')}
         </pre>
       </motion.div>
 
